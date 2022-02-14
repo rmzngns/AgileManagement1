@@ -7,39 +7,33 @@ using System.Threading.Tasks;
 
 namespace AgileManagement.Domain.models
 {
-    public class Sprint:Entity
+    public class Sprint : Entity
     {
-        public string Name { get; private set; } = "Sprint-";
-        public int SprintNo { get; private set; }
-        public DateTime StartDate { get; private set; } 
+        public string Name { get; private set; } 
+        public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }
         public Project Project { get; private set; }
+        public bool IsActive { get; private set; }
 
-        public Sprint(DateTime startDate, DateTime endDate)
+        public Sprint(DateTime startDate, DateTime endDate,string name)
         {
             Id = Guid.NewGuid().ToString();
             SetSprintDate(startDate, endDate);
+            IsActive = true;
+            Name = name;
         }
-        
-        public void SetSprintNo(int sprintno)
-        {
-            if (sprintno<=0)
-            {
-                throw new Exception("Sprint No 0 ve 0'dan küçük olamaz.");
-            }
-            SprintNo = sprintno;
-        }
-       
+
+
         public void SetSprintDate(DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate)
             {
                 throw new Exception("Bitiş tarihi başlangıç tarihinden önce olamaz.");
             }
-            else if(startDate<DateTime.Now)
-                {
+            else if (startDate < DateTime.Now)
+            {
                 throw new Exception("başlangıç tarihi bugünden eski olamaz");
-                }
+            }
             else if ((endDate - startDate).Days > 14)
             {
                 throw new Exception("Başlangıç ile bitiş tarihi arası 2 haftadan fazla olamaz.");
@@ -47,5 +41,17 @@ namespace AgileManagement.Domain.models
             StartDate = startDate.Date;
             EndDate = endDate.Date;
         }
+        public void SetName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Name alanı boş geçilemez");
+            }
+            Name = name;
+        }
+       
+        
+      
+
     }
 }

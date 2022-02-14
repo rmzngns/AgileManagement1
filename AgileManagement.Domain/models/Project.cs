@@ -81,9 +81,11 @@ namespace AgileManagement.Domain
         }
         public void AddSprint(Sprint sprint)
         {
-           
-          sprints.Add(sprint);
-
+            if (sprints.Any(x=>x.Name==sprint.Name))
+            {
+                throw new Exception("isimler aynı olamaz");
+            }
+            sprints.Add(sprint);
         }
      
 

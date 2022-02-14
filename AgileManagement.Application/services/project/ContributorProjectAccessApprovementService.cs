@@ -41,6 +41,7 @@ namespace AgileManagement.Application
                 {
                     contributor.ChangeProjectAccess(ContributorStatus.Accepted);
                     _projectRepository.Save();
+                    _projectRepository.Save();
                     return true;
                 }
                 else

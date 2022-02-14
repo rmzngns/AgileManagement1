@@ -25,9 +25,10 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IContributorProjectAccessApprovementService _contributorProjectAccessApprovementService;
         private readonly ISprintService _sprintService;
+        private readonly ISprintAddService _sprintAddService;
 
 
-        public ProjectController(IProjectRepository projectRepository, IUserRepository userRepository, IProjectWithContributorsRequestService projectWithContributorsRequestService, IMapper mapper, AuthenticatedUser authenticatedUser, IContributorProjectAccessApprovementService contributorProjectAccessApprovementService, ISprintService sprintService) : base(authenticatedUser)
+        public ProjectController(IProjectRepository projectRepository, IUserRepository userRepository, IProjectWithContributorsRequestService projectWithContributorsRequestService, IMapper mapper, AuthenticatedUser authenticatedUser, IContributorProjectAccessApprovementService contributorProjectAccessApprovementService, ISprintService sprintService, ISprintAddService sprintAddService) : base(authenticatedUser)
         {
             _projectRepository = projectRepository;
             _userRepository = userRepository;
@@ -35,6 +36,7 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
             _mapper = mapper;
             _contributorProjectAccessApprovementService = contributorProjectAccessApprovementService;
             _sprintService = sprintService;
+            _sprintAddService = sprintAddService;
         }
 
         public IActionResult Index()
@@ -138,11 +140,16 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult AddSprintRequest([FromBody] SprintInputModel model)
         {
-
-            var project = _projectRepository.Find(model.ProjectsId);
-            project.AddSprint(new Sprint(startDate: model.StartDate, endDate: model.EndDate));
-
-            return Json("OK");
+            var dto = _mapper.Map<SprintInputModel, AddSprintRequestDto>(model);
+            var response=_sprintAddService.OnProcess(dto);
+            if (response)
+            {
+                return Json("OK");
+            }
+            else
+            {
+                return Json("BAD");
+            }
         }
     }
 }
