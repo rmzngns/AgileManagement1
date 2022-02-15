@@ -100,7 +100,7 @@
                     </div>
                 }
             </div>
-          
+
         </div>
 
 
@@ -112,46 +112,52 @@
 
 @section Scripts {
 
-  
+
     <script>
         function AddSprint(projectId) {
-            const startDate = $('#startDate').val;
-            const endDate = $('#endDate').val;
-        }
-        let sprint = {
-            startDate,
-            endDate,
-            projectId
-        }
-        $.ajax({
-            method: 'Post',
-            url: '/Admin/Project/AddSprintRequest',
-            contentType: 'application/json',
-            data: JSON.stringify(sprint), // data body den gönder demek
-            success: function (response) {
-                $(#accordionItem).append($( <div class="accordion accordion-flush" id="accordionFlushExample">
+            const startDate = $('#startDate').val();
+            const endDate = $('#endDate').val();
+
+            let sprint = {
+
+                startDate,
+                endDate,
+                projectId
+            }
+            $.ajax({
+                method: 'Post',
+                url: '/Admin/Project/AddSprintRequest',
+                contentType: 'application/json',
+                data: JSON.stringify(sprint), // data body den gönder demek
+                success: (response) => {
+                    const accordion=`<div class="accordion accordion-flush" id="accordionFlushExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                {}
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    ${response.name}
                                 </button>
                             </h2>
                             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
                                     <div>
-                                        Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
-
+                                       <p>Başlangıç Tarihi: ${response.startDate}</p><br>
+                                         <p>bitiş Tarihi: ${response.endDate}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                    </div>))
-            },
-            error: (error) => {
-                console.log('error', error);
-            }
-        })
+                    </div>`
+
+                    $("#accordionItem").append(accordion);
+                },
+                error: (error) => {
+                    console.log('error', error);
+                }
+            })
+        }
+    </script>
+        
     </script>
 
 

@@ -32,7 +32,7 @@ namespace AgileManagement.Application
                     EndDate = b.EndDate,
                  
 
-                }).ToList()
+                }).OrderBy(x => x.Name).ToList()
             }).FirstOrDefault();
 
 

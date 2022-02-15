@@ -19,7 +19,7 @@ namespace AgileManagement.Application
             _projectRepository = projectRepository;
         }
 
-        public ProjectDto OnProcess(AddSprintRequestDto request)
+        public SprintDto OnProcess(AddSprintRequestDto request)
         {
             var project = _projectRepository.Find(request.ProjectId);
             if (project == null)
@@ -31,22 +31,10 @@ namespace AgileManagement.Application
                 var sprintCount = _projectRepository.GetQuery().Include(x => x.Sprints).SelectMany(a => a.Sprints).Count() + 1;
                 request.Name = $"Sprint-{sprintCount}";
                 project.AddSprint(new Sprint(request.StartDate, request.EndDate, request.Name));
+                _projectRepository.Save();
+                
 
-                var response = _projectRepository.GetQuery().Include(x => x.Sprints).Where(x => x.Id == request.ProjectId).Select(a => new ProjectDto
-                {
-
-                    Name = a.Name,
-                    Description = a.Description,
-                    Sprints = a.Sprints.Select(b => new SprintDto
-                    {
-                        Name = b.Name,
-                        StartDate = b.StartDate,
-                        EndDate = b.EndDate,
-                    }).ToList()
-
-
-                }).FirstOrDefault(x => x.ProjectId == request.ProjectId);
-
+                var response = new SprintDto { Name = request.Name, StartDate = request.StartDate, EndDate = request.EndDate };
                 return response;
             }
         }
