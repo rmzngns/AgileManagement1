@@ -142,14 +142,7 @@ namespace AgileManagement.Mvc.Areas.Admin.Controllers
         {
             var dto = _mapper.Map<SprintInputModel, AddSprintRequestDto>(model);
             var response=_sprintAddService.OnProcess(dto);
-            if (response)
-            {
-                return Json("OK");
-            }
-            else
-            {
-                return Json("BAD");
-            }
+            return Json(response);
         }
     }
 }
