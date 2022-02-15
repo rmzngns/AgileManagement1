@@ -19,22 +19,21 @@ namespace AgileManagement.Application.services.sprint
             _projectRepository = projectRepository;
         }
 
-        public bool OnProcess(AddSprintRequestDto request )
+        public ProjectDto OnProcess(AddSprintRequestDto request )
         {
             var project = _projectRepository.Find(request.ProjectId);
             var sprintCount = _projectRepository.GetQuery().Include(x => x.Sprints).SelectMany(a => a.Sprints).Count()+1;
             request.Name = $"Sprint-{sprintCount}";
             project.AddSprint(new Sprint(request.StartDate, request.EndDate,request.Name));
-            try
-            {
-                _projectRepository.Save();
-                return true;
-            }
-            catch (Exception)
+            
+            var response=_projectRepository.GetQuery().Include(x=>x.Sprints).Where(x=>x.Id==request.ProjectId).Select(a=>new ProjectDto
             {
 
-                return false;
-            }
+                Name=a.Name,
+                 Description=a.Description,
+                 
+
+            })
             
         }
     }

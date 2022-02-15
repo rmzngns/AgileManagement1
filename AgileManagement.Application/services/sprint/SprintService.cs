@@ -30,7 +30,7 @@ namespace AgileManagement.Application
                     Name = b.Name,
                     StartDate = b.StartDate,
                     EndDate = b.EndDate,
-                    SprintNumber = b.SprintNo
+                 
 
                 }).ToList()
             }).FirstOrDefault();
@@ -39,6 +39,9 @@ namespace AgileManagement.Application
             return project;
         }
 
-           
+      
+
+
+
     }
 }
