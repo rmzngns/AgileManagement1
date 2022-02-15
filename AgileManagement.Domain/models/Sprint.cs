@@ -30,7 +30,7 @@ namespace AgileManagement.Domain.models
             {
                 throw new Exception("Bitiş tarihi başlangıç tarihinden önce olamaz.");
             }
-            else if (startDate < DateTime.Now)
+            else if (startDate < DateTime.Now.AddDays(-1))
             {
                 throw new Exception("başlangıç tarihi bugünden eski olamaz");
             }
